@@ -1,0 +1,30 @@
+---
+title: "Week 3 R Markdown Presentation & Plotly"
+author: "Robert Tuck"
+date: "11/13/2017"
+output: ioslides_presentation
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE)
+```
+
+
+## Developing Data Products
+
+```{r message=FALSE, echo=FALSE}
+library(readr)
+library(plotly)
+wine_states_2017 <- read_csv("wine_states_2017.csv")
+wine_states_2017$State <- as.factor(wine_states_2017$State)
+wine_states_2017$rank <- rank(-wine_states_2017$Production, ties.method = 'first')
+
+ map_options <- list(
+     scope = 'usa',
+     projection = list(type = 'albers usa'),
+     showlakes = TRUE,
+     lakecolor = toRGB('white')
+)
+ 
+ plot_ly(type="choropleth", locations=wine_states_2017$State, locationmode="USA-states", z=wine_states_2017$rank, colors = "Purples", showscale = FALSE, reversescale = TRUE) %>% layout(title = 'State Wine Production Rank July 2017', geo = map_options)
+```
